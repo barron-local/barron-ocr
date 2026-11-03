@@ -1,0 +1,9 @@
+openvino
+onnxruntime
+opencv-python-headless
+pyclipper
+numpy
+pillow
+fastapi
+uvicorn
+python-multipart
