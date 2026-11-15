@@ -167,7 +167,7 @@ def ctc_greedy_decode(probabilities: np.ndarray):
                 kept_scores.append(float(confidences[i]))
 
     mean_score = float(np.mean(kept_scores)) if kept_scores else 0.0
-    normalized_conf = min(1.0, max(0.6, (mean_score + 15.0) / 20.0))
+    normalized_conf = min(1.0, max(0.0, mean_score))
     return "".join(chars), normalized_conf
 
 

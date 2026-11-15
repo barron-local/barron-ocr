@@ -485,7 +485,8 @@ export class ClientOCRService {
         ? keptConfs.reduce((a, b) => a + b, 0) / keptConfs.length
         : 0.0
 
-    const normalizedConf = Math.min(1.0, Math.max(0.6, (avgConf + 15) / 20))
+    // Raw model probabilities are between 0.0 and 1.0 (softmax output)
+    const normalizedConf = Math.min(1.0, Math.max(0.0, avgConf))
 
     return {
       text: chars.join(''),
