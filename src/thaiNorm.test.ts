@@ -8,7 +8,6 @@ describe('Thai Canonicalization (thaiNorm)', () => {
   })
 
   it('should remap legacy PUA tone marks to standard unicode', () => {
-    // 0xF705 is PUA mai ek (0x0E48)
     const legacyText = String.fromCharCode(0x0E17, 0x0E35, 0xF705)
     const normalized = canonicalThai(legacyText)
     expect(normalized).toBe('ที่')
@@ -22,5 +21,12 @@ describe('Thai Canonicalization (thaiNorm)', () => {
   it('should normalize non-breaking spaces to standard spaces and trim excess', () => {
     const textWithNbsp = '  ข้อความ\u00A0\u00A0ทดสอบ   '
     expect(canonicalThai(textWithNbsp)).toBe('ข้อความ ทดสอบ')
+  })
+
+  // NEW TDD SPEC: Optical character confusions on legal/invoice documents
+  it('should resolve optical character substitutions in invoice headers', () => {
+    expect(canonicalThai('ใมส่งของชั่วคราว')).toBe('ใบส่งของชั่วคราว')
+    expect(canonicalThai('ราศาประเมิน: 45,000.00 บาท')).toBe('ราคาประเมิน: 45,000.00 บาท')
+    expect(canonicalThai('ทีอยู่: 99/1 ถนนแจ้งวัฒนะ หลักสี กทม.')).toBe('ที่อยู่: 99/1 ถนนแจ้งวัฒนะ หลักสี่ กทม.')
   })
 })

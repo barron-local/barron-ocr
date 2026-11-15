@@ -446,7 +446,8 @@ export class ClientOCRService {
     return { tensor, width: targetW }
   }
 
-  private ctcDecode(probs: Float32Array, dims: readonly number[]) {
+  // Exported for pure unit testing and CTC verification
+  public ctcDecode(probs: Float32Array, dims: readonly number[]) {
     const seqLen = dims[1]
     const numClasses = dims[2]
 
