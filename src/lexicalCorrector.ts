@@ -1,5 +1,7 @@
 // Barron Thai Orthography & Lexical Correction Engine (Zero-Latency, 100% Free & Unlimited)
-// Fixes visual OCR confusions, misread vowels, and context-dependent Thai tokens in <5ms.
+// Combines deterministic exact domain patterns with an algorithmic 62,000-word SymSpell lexicon.
+
+import { globalLexicon, ThaiLexiconIndex } from './thaiSpellEngine'
 
 // 1. High-frequency Thai word corpus & common OCR misrecognitions
 const EXACT_REPLACEMENTS: [RegExp, string][] = [
@@ -77,7 +79,7 @@ export interface CorrectionDiff {
  * Corrects OCR text in real-time (<5ms) using dictionary & optical confusion matrices.
  * 100% Free, Client-side, and Unlimited.
  */
-export function correctThaiOCR(text: string): CorrectionDiff {
+export function correctThaiOCR(text: string, customLexicon?: ThaiLexiconIndex): CorrectionDiff {
   if (!text) {
     return { original: '', corrected: '', fixedCount: 0 }
   }
@@ -101,6 +103,27 @@ export function correctThaiOCR(text: string): CorrectionDiff {
       count += matches.length
       s = s.replace(pattern, replacement)
     }
+  }
+
+  // Pass 3: Algorithmic Lexicon Lookup (if lexicon is loaded)
+  const lexicon = customLexicon || globalLexicon
+  if (lexicon.loaded) {
+    // Split text into tokens (whitespace, punctuation, or lines)
+    const tokens = s.split(/([\s\n,.:;()/-]+)/)
+    const correctedTokens = tokens.map((token) => {
+      // Only attempt spell correction on pure Thai words with length >= 3
+      if (/^[ก-ฮะ-์]{3,}$/.test(token)) {
+        if (!lexicon.hasWord(token)) {
+          const matchResult = lexicon.findBestMatch(token)
+          if (matchResult && matchResult.distance <= 0.8 && matchResult.match !== token) {
+            count++
+            return matchResult.match
+          }
+        }
+      }
+      return token
+    })
+    s = correctedTokens.join('')
   }
 
   return {

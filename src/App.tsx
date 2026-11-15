@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import './App.css'
 import { clientOCR } from './clientOCR'
 import { correctThaiOCR } from './lexicalCorrector'
+import { globalLexicon } from './thaiSpellEngine'
 
 interface OCRLine {
   text: string
@@ -55,6 +56,23 @@ export default function App() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
   const processingQueueRef = useRef(false)
+
+  // Load 62,000-word Thai dictionary in background for algorithmic spell correction
+  useEffect(() => {
+    if (!globalLexicon.loaded) {
+      fetch('/thai_words.json')
+        .then((res) => {
+          if (res.ok) return res.json()
+          throw new Error('Failed to load dictionary')
+        })
+        .then((words: string[]) => {
+          globalLexicon.loadWords(words)
+        })
+        .catch(() => {
+          // Fall back gracefully to tier 1 rules
+        })
+    }
+  }, [])
 
   // Check bridge server health periodically
   const checkBridgeHealth = useCallback(async () => {

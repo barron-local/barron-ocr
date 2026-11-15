@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'bun:test'
 import { correctThaiOCR } from './lexicalCorrector'
+import { ThaiLexiconIndex } from './thaiSpellEngine'
 
 describe('Lexical OCR Post-Corrector (100% Free & Fast)', () => {
   it('should correct optical confusions in invoices and document headers instantly', () => {
@@ -27,5 +28,17 @@ describe('Lexical OCR Post-Corrector (100% Free & Fast)', () => {
     const raw = 'หนัังงสืืออราชการ'
     const res = correctThaiOCR(raw)
     expect(res.corrected).not.toContain('ัั')
+  })
+
+  it('should use 62,000-word algorithmic lexicon to fix general Thai OCR confusions', () => {
+    const lexicon = new ThaiLexiconIndex()
+    lexicon.loadWords(['กระทรวง', 'วัฒนธรรม', 'วิทยาศาสตร์', 'เทคโนโลยี', 'การศึกษา'])
+
+    const raw = 'กวะทรวง วัฒนธวรม วิทยาศาสตว์'
+    // 'กวะทรวง' -> 'กระทรวง' (ว vs ร)
+    // 'วัฒนธวรม' -> 'วัฒนธรรม' (ว vs ร)
+    const res = correctThaiOCR(raw, lexicon)
+    expect(res.corrected).toContain('กระทรวง')
+    expect(res.corrected).toContain('วัฒนธรรม')
   })
 })
