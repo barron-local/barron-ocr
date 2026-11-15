@@ -120,25 +120,5 @@ bun run build
 
 ---
 
-## Project Structure
-
-```
-barron-ocr/
-├── src/
-│   ├── App.tsx             # Precision UI component and state engine
-│   ├── App.css             # Vercel/Linear inspired typography and styling
-│   ├── clientOCR.ts        # WASM pipeline (DBNet + Calipers + Bilinear Warp + CTC)
-│   ├── thaiNorm.ts         # Unicode canonicalization and PUA character mapping
-│   └── thaiNorm.test.ts    # Bun test specifications
-├── public/                 # Static assets, web worker scripts, and bridge server download
-├── test_samples/           # Standard benchmark documents (Receipt, Letter, Invoice, etc.)
-├── bridge_server.py        # Python IPC Native Bridge for multi-thread acceleration
-├── generate_samples.py     # Deterministic test sample image generator
-├── package.json            # Node/Bun dependencies and scripts
-└── tsconfig.json           # TypeScript configuration
-```
-
----
-
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
