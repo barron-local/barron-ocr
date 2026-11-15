@@ -679,8 +679,8 @@ export default function App() {
           <div className="modal-dialog arch-modal-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div className="modal-title-group">
-                <h3>System Architecture &amp; Technical Specifications</h3>
-                <span className="version-pill">Engine Comparison</span>
+                <h3 className="arch-header-title">System Architecture</h3>
+                <span className="version-pill">Dual-Engine Specs</span>
               </div>
               <button className="modal-close" onClick={() => setShowArchModal(false)}>
                 &times;

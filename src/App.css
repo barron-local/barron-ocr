@@ -1329,7 +1329,12 @@ html, body {
 }
 
 .arch-modal-dialog {
-  max-width: 720px;
+  max-width: 840px;
+  width: 90vw;
+}
+
+.arch-header-title {
+  white-space: nowrap;
 }
 
 .disclaimer-grid {
