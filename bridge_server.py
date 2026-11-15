@@ -14,7 +14,7 @@ def ensure_dependencies():
         except ImportError:
             missing.append(pkg)
     if missing:
-        sys.stdout.write(f"Installing missing dependencies: {', '.join(missing)}...\n")
+        sys.stdout.write(f"[barron-bridge] Initializing dependencies: {', '.join(missing)}...\n")
         sys.stdout.flush()
         subprocess.check_call([sys.executable, "-m", "pip", "install", *missing])
 
@@ -96,9 +96,11 @@ def locate_or_download_asset(filename: str) -> str:
     if not url:
         raise FileNotFoundError(f"No source URL defined for {filename}")
 
-    sys.stdout.write(f"Downloading model asset: {filename}...\n")
+    sys.stdout.write(f"[barron-bridge] Synchronizing model weight: {filename}...\n")
     sys.stdout.flush()
     urllib.request.urlretrieve(url, dest_path)
+    sys.stdout.write(f"[barron-bridge] Successfully verified: {filename}\n")
+    sys.stdout.flush()
     return dest_path
 
 DET_MODEL_PATH = locate_or_download_asset("det.onnx")
