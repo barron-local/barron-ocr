@@ -289,7 +289,7 @@ export default function App() {
     if (!currentItem?.result) return
     const diff = correctThaiOCR(currentItem.result.text)
     if (diff.fixedCount === 0) {
-      setFixedNotice('ไม่พบคำที่ต้องแก้ไข')
+      setFixedNotice('ไม่มีข้อความที่เปลี่ยนแปลง')
       setTimeout(() => setFixedNotice(null), 2500)
       return
     }
@@ -902,7 +902,7 @@ export default function App() {
                       <strong>Hardware Execution:</strong> ดึงพลังจาก CPU Multi-core และ GPU (DirectML / CUDA / OpenVINO) โดยตรง ความเร็วเฉลี่ย 150&ndash;350ms ต่อภาพ (เร็วกว่า WASM ประมาณ 10&ndash;20 เท่า)
                     </li>
                     <li>
-                      <strong>Standard DBNet + CTC Pipeline:</strong> ใช้ฟังก์ชัน OpenCV Perspective Transform และ CTC Greedy Decode ดั้งเดิมของโมเดล OpenThai 2.0
+                      <strong>Standard DBNet + CTC Pipeline:</strong> ใช้ฟังก์ชัน OpenCV Perspective Transform และ CTC Greedy Decode มาตรฐาน
                     </li>
                     <li>
                       <strong>Trade-off การใช้งาน:</strong> ผู้ใช้ต้องเปิดรัน <code>python bridge_server.py</code> ในเครื่องก่อนใช้งาน
