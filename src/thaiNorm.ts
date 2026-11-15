@@ -12,12 +12,12 @@ const DROP = new Set(['\u200B', '\u200C', '\u200D', '\u2060', '\u00AD', '\uFEFF'
 
 // High-confidence lexical word replacements for recurring OCR confusions in Thai documents
 const THAI_OCR_FIXES: [RegExp, string][] = [
-  [/\bใมส่งของ/g, 'ใบส่งของ'],
+  [/ใมส่งของ/g, 'ใบส่งของ'],
   [/ชั่วตราว/g, 'ชั่วคราว'],
   [/บริภารระบบ/g, 'บริการระบบ'],
   [/ราศาประเมิน/g, 'ราคาประเมิน'],
   [/ทีอยู่:/g, 'ที่อยู่:'],
-  [/หลักสี(?=\s|$)/g, 'หลักสี่'],
+  [/หลักสี(?=[\s.]|$)/g, 'หลักสี่'],
 ]
 
 export function canonicalThai(text: string): string {

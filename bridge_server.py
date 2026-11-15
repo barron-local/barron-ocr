@@ -46,12 +46,12 @@ SARA_AM_REGEX = re.compile(r"([่-๋]?)ํ([่-๋]?)า")
 DOUBLE_SARA_E = re.compile(r"เเ")
 
 THAI_OCR_FIXES = [
-    (re.compile(r"\bใมส่งของ"), "ใบส่งของ"),
+    (re.compile(r"ใมส่งของ"), "ใบส่งของ"),
     (re.compile(r"ชั่วตราว"), "ชั่วคราว"),
     (re.compile(r"บริภารระบบ"), "บริการระบบ"),
     (re.compile(r"ราศาประเมิน"), "ราคาประเมิน"),
     (re.compile(r"ทีอยู่:"), "ที่อยู่:"),
-    (re.compile(r"หลักสี(?=\s|$)"), "หลักสี่"),
+    (re.compile(r"หลักสี(?=[\s.]|$)"), "หลักสี่"),
 ]
 
 def clean_thai_text(text: str) -> str:
