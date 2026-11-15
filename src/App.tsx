@@ -567,7 +567,61 @@ export default function App() {
 
           {currentItem?.status === 'error' && (
             <div className="state-box">
-              <p style={{ color: 'var(--badge-low-text)' }}>เกิดข้อผิดพลาด: {currentItem.error}</p>
+              <div className="state-error-card">
+                <div className="error-badge-icon">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 3a.9.9 0 1 1 0 1.8A.9.9 0 0 1 8 4zm1 7.2H7V7h2v4.2z" />
+                  </svg>
+                </div>
+                <h4 className="error-card-title">
+                  {engineMode === 'bridge' && currentItem.error?.includes('Bridge Server')
+                    ? 'Native Bridge Disconnected'
+                    : 'Processing Failed'}
+                </h4>
+                <p className="error-card-desc">
+                  {engineMode === 'bridge' && currentItem.error?.includes('Bridge Server') ? (
+                    <>
+                      ไม่สามารถเชื่อมต่อไปยัง Bridge Server ได้ กรุณาเริ่มการทำงานของเซิร์ฟเวอร์เร่งความเร็วฮาร์ดแวร์
+                      <div className="error-code-preview">python bridge_server.py</div>
+                    </>
+                  ) : (
+                    currentItem.error || 'เกิดข้อผิดพลาดในการประมวลผลเอกสาร'
+                  )}
+                </p>
+                <div className="error-card-actions">
+                  {engineMode === 'bridge' && (
+                    <>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => setShowBridgeModal(true)}
+                      >
+                        Setup Guide ⚙
+                      </button>
+                      <button
+                        className="btn btn-action"
+                        onClick={() => {
+                          setEngineMode('wasm')
+                          setImages((prev) =>
+                            prev.map((it) => (it.id === currentItem.id ? { ...it, status: 'pending', error: undefined } : it))
+                          )
+                        }}
+                      >
+                        Switch to WASM
+                      </button>
+                    </>
+                  )}
+                  <button
+                    className="btn btn-action"
+                    onClick={() => {
+                      setImages((prev) =>
+                        prev.map((it) => (it.id === currentItem.id ? { ...it, status: 'pending', error: undefined } : it))
+                      )
+                    }}
+                  >
+                    Retry
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
