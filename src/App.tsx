@@ -264,6 +264,23 @@ export default function App() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  // Export recognized text as .txt file
+  const downloadAsTxt = () => {
+    const text = getDisplayedText()
+    if (!text) return
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    const fileName =
+      textMergeMode === 'combined'
+        ? `barron_ocr_combined_${Date.now()}.txt`
+        : `${currentItem?.name ? currentItem.name.replace(/\.[^/.]+$/, '') : 'ocr_result'}_${Date.now()}.txt`
+    a.href = url
+    a.download = fileName
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const clearAll = () => {
     images.forEach((it) => URL.revokeObjectURL(it.url))
     setImages([])
@@ -642,6 +659,13 @@ export default function App() {
                     onClick={copyToClipboard}
                   >
                     {copied ? 'Copied' : textMergeMode === 'combined' ? 'Copy All' : 'Copy'}
+                  </button>
+                  <button
+                    className="btn btn-action"
+                    onClick={downloadAsTxt}
+                    title="ดาวน์โหลดข้อความเป็นไฟล์ .txt"
+                  >
+                    Export .txt
                   </button>
                 </>
               )}
