@@ -80,7 +80,7 @@ export default function App() {
   // Current selected image item
   const currentItem = images.find((item) => item.id === selectedId) || images[0] || null
 
-  const handleFiles = (files: FileList | File[]) => {
+  const handleFiles = useCallback((files: FileList | File[]) => {
     const validFiles = Array.from(files).filter((f) => f.type.startsWith('image/'))
     if (validFiles.length === 0) {
       return
@@ -101,7 +101,7 @@ export default function App() {
       }
       return updated
     })
-  }
+  }, [selectedId])
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
@@ -109,6 +109,43 @@ export default function App() {
       handleFiles(e.dataTransfer.files)
     }
   }
+
+  // Handle global Clipboard Paste (Ctrl + V)
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      // Don't intercept paste if user is typing in an active editable input or textarea
+      const target = e.target as HTMLElement
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return
+      }
+
+      if (!e.clipboardData) return
+
+      const items = e.clipboardData.items
+      const pastedFiles: File[] = []
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        if (item.type.startsWith('image/')) {
+          const file = item.getAsFile()
+          if (file) {
+            // Assign a recognizable timestamped name if copied from clipboard/screenshot
+            const ext = file.type.split('/')[1] || 'png'
+            const namedFile = new File([file], `Pasted-Image-${Date.now()}.${ext}`, { type: file.type })
+            pastedFiles.push(namedFile)
+          }
+        }
+      }
+
+      if (pastedFiles.length > 0) {
+        e.preventDefault()
+        handleFiles(pastedFiles)
+      }
+    }
+
+    window.addEventListener('paste', handlePaste)
+    return () => window.removeEventListener('paste', handlePaste)
+  }, [handleFiles])
 
   // Queue runner: auto-processes pending images
   useEffect(() => {
@@ -398,8 +435,8 @@ export default function App() {
                   <line x1="12" y1="3" x2="12" y2="15" />
                 </svg>
               </div>
-              <p className="dropzone-label">Click or drag multiple images here</p>
-              <p className="dropzone-hint">Supports selecting multiple PNG, JPG, WebP at once</p>
+              <p className="dropzone-label">Click, drag, or press Ctrl + V to paste image</p>
+              <p className="dropzone-hint">Supports PNG, JPG, WebP &amp; Clipboard screenshots</p>
               <span className="dropzone-browse-badge">Browse Files</span>
               <input
                 id="fileInput"
