@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import './App.css'
 import { clientOCR } from './clientOCR'
+import { correctThaiOCR } from './lexicalCorrector'
 
 interface OCRLine {
   text: string
@@ -49,6 +50,7 @@ export default function App() {
   const [bridgeSuccessMsg, setBridgeSuccessMsg] = useState<string | null>(null)
   const [checkingBridge, setCheckingBridge] = useState(false)
   const [copiedCmd, setCopiedCmd] = useState(false)
+  const [fixedNotice, setFixedNotice] = useState<string | null>(null)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
@@ -261,6 +263,39 @@ export default function App() {
       }
       return filtered
     })
+  }
+
+  // Auto-correct current document text using fast lexical engine (<5ms)
+  const applyLexicalCorrection = () => {
+    if (!currentItem?.result) return
+    const diff = correctThaiOCR(currentItem.result.text)
+    if (diff.fixedCount === 0) {
+      setFixedNotice('ข้อความถูกต้องดีแล้ว ไม่พบคำผิด')
+      setTimeout(() => setFixedNotice(null), 2500)
+      return
+    }
+
+    // Apply correction to current item text and lines
+    setImages((prev) =>
+      prev.map((it) => {
+        if (it.id !== currentItem.id || !it.result) return it
+        const updatedLines = it.result.lines.map((l) => ({
+          ...l,
+          text: correctThaiOCR(l.text).corrected,
+        }))
+        return {
+          ...it,
+          result: {
+            ...it.result,
+            text: diff.corrected,
+            lines: updatedLines,
+          },
+        }
+      })
+    )
+
+    setFixedNotice(`แก้ไขคำผิดสำเร็จ ${diff.fixedCount} จุด`)
+    setTimeout(() => setFixedNotice(null), 2500)
   }
 
   // Draw bounding boxes on canvas over the selected image
@@ -572,12 +607,23 @@ export default function App() {
               )}
 
               {(currentItem?.result || (textMergeMode === 'combined' && images.some((i) => i.status === 'done'))) && (
-                <button
-                  className={`btn btn-action copy-action-btn ${copied ? 'copied' : ''}`}
-                  onClick={copyToClipboard}
-                >
-                  {copied ? 'Copied' : textMergeMode === 'combined' ? 'Copy All' : 'Copy'}
-                </button>
+                <>
+                  {viewMode === 'text' && currentItem?.result && (
+                    <button
+                      className="btn btn-action"
+                      onClick={applyLexicalCorrection}
+                      title="สแกนและแก้ไขคำผิดตามหลักภาษาไทยทันที (<5ms) ฟรี 100% ไม่จำกัด"
+                    >
+                      {fixedNotice || 'Auto Fix'}
+                    </button>
+                  )}
+                  <button
+                    className={`btn btn-action copy-action-btn ${copied ? 'copied' : ''}`}
+                    onClick={copyToClipboard}
+                  >
+                    {copied ? 'Copied' : textMergeMode === 'combined' ? 'Copy All' : 'Copy'}
+                  </button>
+                </>
               )}
             </div>
           </div>
