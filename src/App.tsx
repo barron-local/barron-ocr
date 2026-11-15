@@ -818,6 +818,16 @@ export default function App() {
                   </ul>
                 </div>
               </div>
+
+              {/* Accuracy Disclaimer */}
+              <div className="accuracy-disclaimer-box">
+                <svg className="accuracy-icon" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 3a.9.9 0 1 1 0 1.8A.9.9 0 0 1 8 4zm1 7.2H7V7h2v4.2z" />
+                </svg>
+                <p className="accuracy-text">
+                  <strong>ข้อจำกัดความแม่นยำ (Accuracy Disclaimer):</strong> โมเดล OCR อ้างอิงสถาปัตยกรรม DBNet + CTC ซึ่งความแม่นยำขึ้นอยู่กับคุณภาพความคมชัดของภาพ, แสงเงา, ฟอนต์ และองศาการถ่ายภาพ เอกสารทางการเงินหรือเอกสารทางกฎหมายควรได้รับการตรวจสอบทานความถูกต้องของข้อความซ้ำโดยมนุษย์ก่อนนำไปใช้งานจริงเสมอ
+                </p>
+              </div>
             </div>
 
             <div className="modal-footer">

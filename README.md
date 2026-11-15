@@ -120,5 +120,10 @@ bun run build
 
 ---
 
+## Accuracy Disclaimer
+Optical Character Recognition (OCR) precision depends on input resolution, lighting conditions, font geometry, and scanning perspective. While Barron OCR applies rotating calipers and canonical orthography corrections, critical financial, medical, and legal documents should always be audited and verified by human inspection prior to downstream consumption.
+
+---
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
