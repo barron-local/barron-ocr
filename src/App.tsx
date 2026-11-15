@@ -739,7 +739,6 @@ export default function App() {
                 <div className="disclaimer-card wasm-card">
                   <div className="disclaimer-card-header">
                     <span className="card-engine-title">In-Browser (WASM)</span>
-                    <span className="card-tag wasm">Zero Setup</span>
                   </div>
                   <p className="disclaimer-card-body">
                     ประมวลผลบนเบราว์เซอร์ด้วย ONNX Runtime Web (WASM Single-Core) เสริม Pipeline สำหรับเอกสารจริง:
@@ -765,7 +764,6 @@ export default function App() {
                 <div className="disclaimer-card bridge-card">
                   <div className="disclaimer-card-header">
                     <span className="card-engine-title">Native Bridge</span>
-                    <span className="card-tag bridge">Max Speed</span>
                   </div>
                   <p className="disclaimer-card-body">
                     ประมวลผลผ่าน Python Native Service สื่อสารผ่าน Local Port 6767:
