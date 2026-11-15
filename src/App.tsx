@@ -738,7 +738,7 @@ export default function App() {
               <div className="disclaimer-grid">
                 <div className="disclaimer-card">
                   <div className="disclaimer-card-header">
-                    <span className="card-engine-title">In-Browser (WASM + Post-Processing)</span>
+                    <span className="card-engine-title">In-Browser (WASM)</span>
                     <span className="card-tag wasm">Zero Setup</span>
                   </div>
                   <p className="disclaimer-card-body">
@@ -759,7 +759,7 @@ export default function App() {
 
                 <div className="disclaimer-card">
                   <div className="disclaimer-card-header">
-                    <span className="card-engine-title">Native Bridge (Hardware Accelerated)</span>
+                    <span className="card-engine-title">Native Bridge</span>
                     <span className="card-tag bridge">Max Speed</span>
                   </div>
                   <p className="disclaimer-card-body">
