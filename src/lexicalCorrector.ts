@@ -69,10 +69,16 @@ const PHONETIC_PATTERNS: [RegExp, string][] = [
   [/([ก-ฮ])็([่้๊๋])/g, '$1$2'],
 ]
 
+export interface FixedChangeItem {
+  from: string
+  to: string
+}
+
 export interface CorrectionDiff {
   original: string
   corrected: string
   fixedCount: number
+  changes: FixedChangeItem[]
 }
 
 /**
@@ -81,17 +87,21 @@ export interface CorrectionDiff {
  */
 export function correctThaiOCR(text: string, customLexicon?: ThaiLexiconIndex): CorrectionDiff {
   if (!text) {
-    return { original: '', corrected: '', fixedCount: 0 }
+    return { original: '', corrected: '', fixedCount: 0, changes: [] }
   }
 
   let s = text
   let count = 0
+  const changesMap = new Map<string, string>()
 
   // Pass 1: High-confidence exact lexical replacements
   for (const [pattern, replacement] of EXACT_REPLACEMENTS) {
     const matches = s.match(pattern)
     if (matches) {
       count += matches.length
+      matches.forEach((m) => {
+        changesMap.set(m.trim(), replacement.trim())
+      })
       s = s.replace(pattern, replacement)
     }
   }
@@ -117,6 +127,7 @@ export function correctThaiOCR(text: string, customLexicon?: ThaiLexiconIndex): 
           const matchResult = lexicon.findBestMatch(token)
           if (matchResult && matchResult.distance <= 0.8 && matchResult.match !== token) {
             count++
+            changesMap.set(token, matchResult.match)
             return matchResult.match
           }
         }
@@ -126,9 +137,15 @@ export function correctThaiOCR(text: string, customLexicon?: ThaiLexiconIndex): 
     s = correctedTokens.join('')
   }
 
+  const changes: FixedChangeItem[] = Array.from(changesMap.entries()).map(([from, to]) => ({
+    from,
+    to,
+  }))
+
   return {
     original: text,
     corrected: s,
     fixedCount: count,
+    changes,
   }
 }

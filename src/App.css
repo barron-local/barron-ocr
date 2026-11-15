@@ -1302,6 +1302,88 @@ html, body {
   border: 1px solid var(--badge-green-border);
 }
 
+/* Correction Audit Changes Banner */
+.correction-diff-banner {
+  background: #fafafa;
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.diff-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.diff-title {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-family: var(--font-mono);
+}
+
+.diff-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.diff-close-btn:hover {
+  color: var(--text-primary);
+}
+
+.diff-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.diff-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-size: 0.76rem;
+  font-family: var(--font-mono);
+}
+
+.diff-from {
+  color: #dc2626;
+  text-decoration: line-through;
+  opacity: 0.85;
+}
+
+.diff-arrow {
+  color: var(--text-tertiary);
+  font-size: 0.7rem;
+}
+
+.diff-to {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .confidence-badge.medium {
   background: var(--badge-amber-bg);
   color: var(--badge-amber-text);

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import './App.css'
 import { clientOCR } from './clientOCR'
-import { correctThaiOCR } from './lexicalCorrector'
+import { correctThaiOCR, type FixedChangeItem } from './lexicalCorrector'
 import { globalLexicon } from './thaiSpellEngine'
 
 interface OCRLine {
@@ -52,6 +52,7 @@ export default function App() {
   const [checkingBridge, setCheckingBridge] = useState(false)
   const [copiedCmd, setCopiedCmd] = useState(false)
   const [fixedNotice, setFixedNotice] = useState<string | null>(null)
+  const [lastFixChanges, setLastFixChanges] = useState<FixedChangeItem[]>([])
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
@@ -294,6 +295,7 @@ export default function App() {
     }
 
     // Apply correction to current item text and lines
+    setLastFixChanges(diff.changes)
     setImages((prev) =>
       prev.map((it) => {
         if (it.id !== currentItem.id || !it.result) return it
@@ -774,6 +776,32 @@ export default function App() {
               {/* View 1: Full Text Area Tab */}
               {viewMode === 'text' && (
                 <div className="tab-content">
+                  {lastFixChanges.length > 0 && (
+                    <div className="correction-diff-banner">
+                      <div className="diff-header">
+                        <span className="diff-title">
+                          Auto Fix Changes ({lastFixChanges.length} รายการที่แก้ไข)
+                        </span>
+                        <button
+                          className="diff-close-btn"
+                          onClick={() => setLastFixChanges([])}
+                          title="ปิดแถบแจ้งเตือน"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                      <div className="diff-chips">
+                        {lastFixChanges.map((change, idx) => (
+                          <span key={idx} className="diff-chip" title={`${change.from} -> ${change.to}`}>
+                            <span className="diff-from">{change.from}</span>
+                            <span className="diff-arrow">→</span>
+                            <span className="diff-to">{change.to}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <textarea
                     readOnly
                     value={getDisplayedText()}
