@@ -555,6 +555,20 @@ html, body {
   text-align: left;
 }
 
+.bridge-success-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--badge-green-bg);
+  border: 1px solid var(--badge-green-border);
+  border-radius: 5px;
+  color: var(--badge-green-text);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
 .error-icon {
   width: 14px;
   height: 14px;

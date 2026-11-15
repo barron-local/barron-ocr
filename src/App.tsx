@@ -46,6 +46,7 @@ export default function App() {
   const [showBridgeModal, setShowBridgeModal] = useState(false)
   const [showArchModal, setShowArchModal] = useState(false)
   const [bridgeErrorMsg, setBridgeErrorMsg] = useState<string | null>(null)
+  const [bridgeSuccessMsg, setBridgeSuccessMsg] = useState<string | null>(null)
   const [checkingBridge, setCheckingBridge] = useState(false)
   const [copiedCmd, setCopiedCmd] = useState(false)
 
@@ -821,6 +822,15 @@ export default function App() {
             </div>
 
             <div className="modal-footer">
+              {bridgeSuccessMsg && (
+                <div className="bridge-success-banner">
+                  <svg className="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" fill="#10b981" />
+                    <path d="M5 8.2L7 10.2L11.5 5.8" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="error-text">{bridgeSuccessMsg}</span>
+                </div>
+              )}
               {bridgeErrorMsg && (
                 <div className="bridge-error-banner">
                   <svg className="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -837,11 +847,12 @@ export default function App() {
                   onClick={async () => {
                     setCheckingBridge(true)
                     setBridgeErrorMsg(null)
+                    setBridgeSuccessMsg(null)
                     const ok = await checkBridgeHealth()
                     setCheckingBridge(false)
                     if (ok) {
                       setEngineMode('bridge')
-                      setShowBridgeModal(false)
+                      setBridgeSuccessMsg('เชื่อมต่อ Native Bridge สำเร็จแล้ว พร้อมใช้งานโหมด Hardware Acceleration')
                     } else {
                       setBridgeErrorMsg('ไม่สามารถเชื่อมต่อ http://127.0.0.1:6767 ได้ กรุณาตรวจสอบว่ารัน python bridge_server.py แล้วหรือไม่')
                     }
