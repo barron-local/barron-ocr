@@ -288,7 +288,7 @@ export default function App() {
     if (!currentItem?.result) return
     const diff = correctThaiOCR(currentItem.result.text)
     if (diff.fixedCount === 0) {
-      setFixedNotice('ข้อความถูกต้องดีแล้ว ไม่พบคำผิด')
+      setFixedNotice('ไม่พบคำผิดที่ตรงกับฐานข้อมูลคำศัพท์')
       setTimeout(() => setFixedNotice(null), 2500)
       return
     }
