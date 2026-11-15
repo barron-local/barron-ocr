@@ -289,7 +289,7 @@ export default function App() {
     if (!currentItem?.result) return
     const diff = correctThaiOCR(currentItem.result.text)
     if (diff.fixedCount === 0) {
-      setFixedNotice('ไม่มีข้อความที่เปลี่ยนแปลง')
+      setFixedNotice('ไม่พบรายการที่ระบบแก้ไขได้')
       setTimeout(() => setFixedNotice(null), 2500)
       return
     }
