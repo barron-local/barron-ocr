@@ -802,11 +802,44 @@ export default function App() {
                     </div>
                   )}
 
-                  <textarea
-                    readOnly
-                    value={getDisplayedText()}
-                    className="text-output full-height"
-                  />
+                  {lastFixChanges.length > 0 ? (
+                    <div
+                      className="text-output full-height"
+                      tabIndex={0}
+                      role="textbox"
+                      aria-readonly="true"
+                    >
+                      {(() => {
+                        const fullText = getDisplayedText()
+                        // Escape regex characters
+                        const escapedWords = lastFixChanges
+                          .map((c) => c.to.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+                          .filter(Boolean)
+                        if (escapedWords.length === 0) return fullText
+
+                        const regex = new RegExp(`(${escapedWords.join('|')})`, 'g')
+                        const parts = fullText.split(regex)
+
+                        return parts.map((part, i) => {
+                          const isMatch = lastFixChanges.some((c) => c.to === part)
+                          if (isMatch) {
+                            return (
+                              <mark key={i} className="highlight-fixed" title="คำนี้ได้รับการแก้ไขอัตโนมัติ">
+                                {part}
+                              </mark>
+                            )
+                          }
+                          return part
+                        })
+                      })()}
+                    </div>
+                  ) : (
+                    <textarea
+                      readOnly
+                      value={getDisplayedText()}
+                      className="text-output full-height"
+                    />
+                  )}
                 </div>
               )}
 
