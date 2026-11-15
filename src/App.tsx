@@ -895,7 +895,7 @@ export default function App() {
                     <span className="card-engine-title">Native Bridge</span>
                   </div>
                   <p className="disclaimer-card-body">
-                    ประมวลผลผ่าน Python Native Service สื่อสารผ่าน Local Port 6767:
+                    ประมวลผลผ่าน Native Service ภายในเครื่องเพื่อเร่งความเร็วฮาร์ดแวร์:
                   </p>
                   <ul className="disclaimer-bullets">
                     <li>
