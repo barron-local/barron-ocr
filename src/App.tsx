@@ -362,7 +362,7 @@ export default function App() {
                   className="btn btn-action"
                   onClick={() => document.getElementById('addMoreInput')?.click()}
                 >
-                  + Add More
+                  Add More
                 </button>
                 <input
                   id="addMoreInput"
