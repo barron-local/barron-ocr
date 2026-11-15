@@ -1431,25 +1431,73 @@ html, body {
 }
 
 .disclaimer-grid {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 20px;
+}
+
+/* VS Badge Divider */
+.vs-badge-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.vs-badge {
+  background: #ffffff;
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 860px) {
   .disclaimer-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .vs-badge-container {
+    display: none;
   }
 }
 
 .disclaimer-card {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-subtle);
-  border-radius: 6px;
-  padding: 14px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.disclaimer-card:hover {
+  border-color: #a3a3a3;
+  box-shadow: var(--shadow-md);
+}
+
+.disclaimer-card.wasm-card {
+  border-top: 3px solid #3b82f6;
+}
+
+.disclaimer-card.bridge-card {
+  border-top: 3px solid #10b981;
 }
 
 .disclaimer-card-header {
@@ -1457,6 +1505,8 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
   flex-wrap: nowrap;
 }
 

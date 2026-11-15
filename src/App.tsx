@@ -736,7 +736,7 @@ export default function App() {
 
             <div className="modal-body">
               <div className="disclaimer-grid">
-                <div className="disclaimer-card">
+                <div className="disclaimer-card wasm-card">
                   <div className="disclaimer-card-header">
                     <span className="card-engine-title">In-Browser (WASM)</span>
                     <span className="card-tag wasm">Zero Setup</span>
@@ -757,7 +757,12 @@ export default function App() {
                   </ul>
                 </div>
 
-                <div className="disclaimer-card">
+                {/* Center VS Badge */}
+                <div className="vs-badge-container">
+                  <span className="vs-badge">VS</span>
+                </div>
+
+                <div className="disclaimer-card bridge-card">
                   <div className="disclaimer-card-header">
                     <span className="card-engine-title">Native Bridge</span>
                     <span className="card-tag bridge">Max Speed</span>
