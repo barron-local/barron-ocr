@@ -671,14 +671,6 @@ export default function App() {
         </section>
       </main>
 
-      {/* Clean Minimalist Footer */}
-      <footer className="footer-bar">
-        <span className="footer-copy">Barron OCR &bull; Dual-Engine Precision Platform</span>
-        <button className="footer-link-btn" onClick={() => setShowArchModal(true)}>
-          System Architecture &amp; Technical Specs ⓘ
-        </button>
-      </footer>
-
       {/* Architecture & Specs Modal */}
       {showArchModal && (
         <div className="modal-backdrop" onClick={() => setShowArchModal(false)}>
