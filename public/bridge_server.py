@@ -295,7 +295,12 @@ class HTTPBridgeHandler(BaseHTTPRequestHandler):
                 else:
                     raw_bytes = data
 
+                t_start = time.perf_counter()
                 output = execute_pipeline(raw_bytes)
+                dur = int(round((time.perf_counter() - t_start) * 1000))
+                num_lines = len(output.get("lines", []))
+                sys.stdout.write(f"[barron-bridge] Processed image in {dur}ms ({num_lines} lines detected)\n")
+                sys.stdout.flush()
                 payload = json.dumps(output, ensure_ascii=False).encode("utf-8")
                 self.send_cors_response(200, payload)
             except Exception as exc:
@@ -305,13 +310,19 @@ class HTTPBridgeHandler(BaseHTTPRequestHandler):
             self.send_cors_response(404, b'{"error": "Endpoint Not Found"}')
 
     def log_message(self, fmt, *args):
-        sys.stderr.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {args[0]} {args[1]} {args[2]}\n")
+        # Mute repetitive background health poll logs to keep terminal clean
+        if len(args) >= 1 and "/health" in str(args[0]):
+            return
+        sys.stderr.write(f"[barron-bridge] [{time.strftime('%Y-%m-%d %H:%M:%S')}] {args[0]} {args[1]} {args[2]}\n")
 
 
 def serve():
     address = ("127.0.0.1", PORT)
     server = HTTPServer(address, HTTPBridgeHandler)
-    sys.stdout.write(f"Barron OCR Native Bridge initialized on http://127.0.0.1:{PORT} [{CURRENT_PROVIDER}]\n")
+    sys.stdout.write(f"\n[barron-bridge] Server operational at http://127.0.0.1:{PORT}\n")
+    sys.stdout.write(f"[barron-bridge] Execution Provider : {CURRENT_PROVIDER}\n")
+    sys.stdout.write(f"[barron-bridge] Active CPU Threads   : {session_opts.intra_op_num_threads}\n")
+    sys.stdout.write(f"[barron-bridge] Ready for OCR inference requests...\n\n")
     sys.stdout.flush()
     try:
         server.serve_forever()
