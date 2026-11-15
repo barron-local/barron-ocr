@@ -121,7 +121,7 @@ bun run build
 ---
 
 ## Accuracy Disclaimer
-Optical Character Recognition (OCR) precision depends on input resolution, lighting conditions, font geometry, and scanning perspective. While Barron OCR applies rotating calipers and canonical orthography corrections, critical financial, medical, and legal documents should always be audited and verified by human inspection prior to downstream consumption.
+Even with high-resolution input, Optical Character Recognition (OCR) precision is not guaranteed to achieve 100% accuracy. The underlying DBNet + CTC architecture depends heavily on training dataset diversity, font distribution coverage, lighting conditions, and line orientation. Critical financial, medical, and legal documents should always be audited and verified by human inspection prior to downstream consumption.
 
 ---
 
